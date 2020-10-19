@@ -1,5 +1,3 @@
-### A script to check for new announcements on the site of Dept of Physics, UoP and send notification via pushover
-
 import requests, http.client, urllib, sys, time
 from bs4 import BeautifulSoup
 
@@ -7,34 +5,34 @@ r = requests.get("http://www.physics.upatras.gr/index.php?page=newsNews/", heade
 c=r.content
 
 soup=BeautifulSoup(c,"html.parser")
-
-
 all=soup.find_all("div",{"class":"wrapper col3"})
-
-
-
 all[0].find("div",{"id":"content"})
-hub=[]
-#print(all)
-while True:
-    for item in all:
-        b=item.find("a",{"class":"newsFirstTitleWhite"}).text
-        if b in hub:
-            print("Δεν υπάχουν νέες ανακοινώσεις")
-        else:
-            hub.clear()
-            hub.append(b)
-            conn = http.client.HTTPSConnection("api.pushover.net:443")
-            conn.request("POST", "/1/messages.json",
-            urllib.parse.urlencode({
-                "token": "my_token",
-                "user": "my_user",
-                "message": b,
-                "title": "Physics",
-                "url": "http://www.physics.upatras.gr/index.php?page=newsNews/",
-                "url_title": "announcement's url",
-            }), { "Content-type": "application/x-www-form-urlencoded" })
-            conn.getresponse()
-    time.sleep(1800)
+for item in all:
+    b=item.find("a",{"class":"newsFirstTitleWhite"}).text
+#    b="Maria!"
 
+f= open("Announcements.txt","r+")
 
+    
+with open("Announcements.txt") as f:
+    if b in f.read():
+        print("Δεν υπάχουν νέες ανακοινώσεις")
+    else:
+        f = open('Announcements.txt', 'r+')
+        f.truncate(0)
+        f = open('Announcements.txt', 'a+')
+        f.write(b)
+        f.close()
+
+        conn = http.client.HTTPSConnection("api.pushover.net:443")
+        conn.request("POST", "/1/messages.json",
+        urllib.parse.urlencode({
+            "token": "a4xbfarsd5vicoxjqe5yre41osx9sd",
+            "user": "ucoscjeb5prit9jfnfn2iozhkgd2zt",
+            "message": b,
+            "title": "Physics",
+            "url": "http://www.physics.upatras.gr/index.php?page=newsNews/",
+            "url_title": "url ανακοίνωσης",
+        }), { "Content-type": "application/x-www-form-urlencoded" })
+        conn.getresponse()
+    
