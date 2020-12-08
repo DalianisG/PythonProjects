@@ -5,14 +5,14 @@ import time
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
-
+chrome_path = "/usr/bin/chromedriver"
 
 zip = input("Place your zip: ")
 adress = input("Place your adress: ")
 number = input("Place your number: ")
 
 
-driver = webdriver.Chrome(executable_path="./chromedriver", options=chrome_options)
+driver = webdriver.Chrome(executable_path=chrome_path, options=chrome_options)
 driver.get("https://submit.sfbb.gr/EligibilityCheck.aspx")
 
 driver.find_element_by_id("ctl00_cphMain_txtZipCode_I").send_keys(zip)
